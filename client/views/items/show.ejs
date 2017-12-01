@@ -1,0 +1,43 @@
+<% include ../partials/header %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">Rate My Thing</p>
+            <div class="list-group">
+                <li class="list-group-item">Info</li>
+                <li class="list-group-item">Info</li>
+                <li class="list-group-item">Info</li>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="thumbnail">
+                 <img class="image-responsive" src="<%= item.image %>"/>
+                 <div class="caption-full">
+                     <h4 class="pull-right">Bid Price</h4>
+                     <h4><a><%= item.name %></a></h4>
+                     <p><%= item.description %></p>
+                 </div>
+            </div>
+            <div class="well">
+                <div class="text-right">
+                    <a class="btn btn-success" href="/items/<%= item._id %>/comments/new">Add a new comment!</a>
+                </div>
+                <hr>
+                <% item.comments.forEach(function(comment){ %>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <strong><%= comment.authour %></strong>
+                            <span class="pull-right">Date and Time Ago</span>
+                            <p>
+                                <%= comment.text %>
+                            </p>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %>
