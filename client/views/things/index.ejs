@@ -5,20 +5,20 @@
             <h1>Welcome to Rate This Thing!</h1>
             <p>Check out all these cool things!</p>
             <p>
-                <a class="btn btn-primary btn-large" href="/items/new">Add your own thing!</a>
+                <a class="btn btn-primary btn-large" href="/things/new">Add your own thing!</a>
             </p>
         </div>
     </header>
     <div class="row text-center" style="display: flex; flex-wrap: wrap;">
-        <% items.forEach(function(item){ %>
+        <% things.forEach(function(thing){ %>
             <div class="col-md-3 col-sm-6">
                 <div class="thumbnail">
-                    <img src="<%= item.image %>"/>
+                    <img src="<%= thing.image %>"/>
                     <div class="caption">
-                        <h4><%= item.name %></h4>
+                        <h4><%= thing.name %></h4>
                     </div>
                     <p>
-                        <a href="/items/<%= item._id %>" class="btn btn-primary">More info</a>
+                        <a href="/things/<%= thing._id %>" class="btn btn-primary">More info</a>
                     </p>
                 </div>
             </div>

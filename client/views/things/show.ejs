@@ -1,0 +1,56 @@
+<% include ../partials/header %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">Rate My Thing</p>
+            <div class="list-group">
+                <li class="list-group-item">Info</li>
+                <li class="list-group-item">Info</li>
+                <li class="list-group-item">Info</li>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="thumbnail">
+                 <img class="image-responsive" src="<%= thing.image %>"/>
+                 <div class="caption-full">
+                     <h4 class="pull-right">Bid Price</h4>
+                     <h4><a><%= thing.name %></a></h4>
+                     <p><%= thing.description %></p>
+                     <p><em>Submitted By: <%= thing.authour.username %></em></p>
+                     <% if(currentUser && thing.authour.id.equals(currentUser._id)){ %>
+                         <a href="/things/<%= thing._id %>/edit" class="btn btn-warning">Edit</a>
+                         <form class="deleteForm" action="/things/<%= thing._id %>?_method=DELETE" method="POST">
+                             <button class="btn btn-danger">Delete</button>
+                         </form>
+                     <% } %>
+                 </div>
+            </div>
+            <div class="well">
+                <div class="text-right">
+                    <a class="btn btn-success" href="/things/<%= thing._id %>/comments/new">Add a new comment!</a>
+                </div>
+                <hr>
+                <% thing.comments.forEach(function(comment){ %>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <strong><%= comment.authour.username %></strong>
+                            <span class="pull-right">Date and Time Ago</span>
+                            <p>
+                                <%= comment.text %>
+                            </p>
+                            <% if(currentUser && comment.authour.id.equals(currentUser._id)){ %>
+                                <a class="btn btn-xs btn-warning" href="/things/<%= thing._id %>/comments/<%= comment._id %>/edit">Edit</a>
+                                <form class="deleteForm" action="/things/<%= thing._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                                    <input type="submit" value="Delete" class="btn btn-xs btn-danger">
+                                </form>
+                            <% } %>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %>

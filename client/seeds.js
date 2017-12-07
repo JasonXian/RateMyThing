@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var Item = require("./models/item");
+var Thing = require("./models/thing");
 var Comment = require("./models/comments");
 
 var data = [
@@ -21,12 +21,12 @@ var data = [
 ];
 
 function seedDB(){
-    Item.remove({}, function(err, item){
+    Thing.remove({}, function(err, thing){
         if(err){
             console.log("error");
         }
-        data.forEach(function(item){
-            Item.create(item, function(err, item) {
+        data.forEach(function(thing){
+            Thing.create(thing, function(err, thing) {
                 if(err){
                     console.log("Error!");
                 }else{
@@ -38,8 +38,8 @@ function seedDB(){
                            if(err){
                                console.log("Something went wrong!");
                            }else{
-                                item.comments.push(comment);
-                                item.save();
+                                thing.comments.push(comment);
+                                thing.save();
                            }
                         }
                     );
