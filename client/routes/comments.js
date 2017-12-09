@@ -2,22 +2,24 @@ var express = require("express");
 var router = express.Router({mergeParams: true});
 var Thing = require("../models/thing");
 var Comment = require("../models/comments");
+var middleware = require("../middleware");
 
-router.get("/new", isLoggedIn, function(req, res) {
+router.get("/new",middleware.isLoggedIn, function(req, res) {
     Thing.findById(req.params.id, function(err, thing){
-        if(err){
-            console.log("Error");
+        if(err || !thing){
+            req.flash("error", "Please login first!");
+            req.redirect("/login");
         }else{
             res.render("comments/new", {thing: thing});
         }
     });
 });
 
-router.post("/", isLoggedIn, function(req, res){
+router.post("/", middleware.isLoggedIn, function(req, res){
     Thing.findById(req.params.id, function(err, thing){
-        if(err){
-            console.log("Error made");
-            res.redirect("/things");
+        if(err || !thing){
+            req.flash("error", "Please login first!");
+            res.redirect("/login");
         }else{
            Comment.create(req.body.comment, function(err, comment){
                if(err){
@@ -35,9 +37,10 @@ router.post("/", isLoggedIn, function(req, res){
     });
 });
 
-router.get("/:comment_id/edit", checkCommentOwner, function(req, res){
+router.get("/:comment_id/edit", middleware.checkCommentOwner, function(req, res){
     Comment.findById(req.params.comment_id, function(err, comment) {
-        if(err){
+        if(err || !comment){
+            req.flash("error", "Couldn't find this comment!");
             res.redirect("back");
         }else{
             res.render("comments/edit", {thing_id: req.params.id, comment: comment});
@@ -45,49 +48,28 @@ router.get("/:comment_id/edit", checkCommentOwner, function(req, res){
     })
 });
 
-router.put("/:comment_id", checkCommentOwner, function(req, res){
+router.put("/:comment_id", middleware.checkCommentOwner, function(req, res){
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, comment) {
-        if(err){
+        if(err || !comment){
+            req.flash("error", "Couldn't find this comment!");
             res.redirect("back");
         }else{
+            req.flash("success", "Comment updated!");
             res.redirect("/things/" + req.params.id);
         }
     })
 });
 
-router.delete("/:comment_id", checkCommentOwner, function(req, res){
+router.delete("/:comment_id", middleware.checkCommentOwner, function(req, res){
    Comment.findByIdAndRemove(req.params.comment_id, function(err, comment){
-       if(err){
+       if(err || !thing){
+           req.flash("error", "Couldn't find this comment!");
            res.redirect("back");
        }else{
+           req.flash("success", "Comment deleted!");
            res.redirect("/things/" + req.params.id);
        }
    }); 
 });
-
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-};
-
-function checkCommentOwner(req, res, next){
-    if(req.isAuthenticated()){
-        Comment.findById(req.params.comment_id, function(err, comment){
-            if(err){
-                res.redirect("/things");
-            }else{
-                if(comment.authour.id.equals(req.user._id)){
-                    next();
-                }else{
-                    res.redirect("back");   
-                }
-            }
-        });
-    }else{
-        res.redirect("back");
-    }
-}
 
 module.exports = router;
