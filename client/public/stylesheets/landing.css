@@ -40,3 +40,44 @@ body {
     background-position: 50% 50%;
     animation: fadeImage 50s linear infinite;
 }
+
+.slideshow li:nth-child(1) { 
+  background-image: url(https://images.pexels.com/photos/33597/guitar-classical-guitar-acoustic-guitar-electric-guitar.jpg?w=1260&h=750&auto=compress&cs=tinysrgb); 
+}
+.slideshow li:nth-child(2) { 
+  background-image: url(https://images.pexels.com/photos/12211/pexels-photo-12211.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb);
+  animation-delay: 10s; 
+}
+.slideshow li:nth-child(3) { 
+  background-image: url(https://images.pexels.com/photos/132694/pexels-photo-132694.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb);
+  animation-delay: 20s; 
+}
+.slideshow li:nth-child(4) { 
+  background-image: url(https://images.pexels.com/photos/395074/pexels-photo-395074.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb);
+  animation-delay: 30s; 
+}
+.slideshow li:nth-child(5) { 
+  background-image: url(https://images.pexels.com/photos/139764/pexels-photo-139764.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb);
+  animation-delay: 40s; 
+}
+
+@keyframes fadeImage { 
+  0% { 
+    opacity: 0; 
+    animation-timing-function: ease-in;
+  }
+  10% {
+    opacity: 1;
+    animation-timing-function: ease-out;
+  }
+  20% {
+    opacity: 1
+  }
+  30% {
+    opacity: 0
+  }
+}
+
+.no-cssanimations .slideshow li {
+	opacity: 1;
+}

@@ -4,6 +4,9 @@ var thingSchema = new mongoose.Schema({
     name: String,
     image: String,
     description: String,
+    location: String,
+    lat: Number,
+    long: Number,
     authour: {
         id:{
             type: mongoose.Schema.Types.ObjectId,

@@ -13,3 +13,14 @@
 .deleteForm {
     display: inline;
 }
+
+.centerText {
+    width: 30%; 
+    margin: 25px auto;
+}
+
+/*Show.ejs*/
+#map{
+    height: 400px;
+    width: 100%;
+}
