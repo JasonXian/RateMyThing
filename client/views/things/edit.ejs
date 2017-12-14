@@ -1,9 +1,11 @@
 <% include ../partials/header %>
 
-<div class="container">
-    <div class="row">
-        <h1 style="text-align: center">Edit <%= thing.name %></h1>
-        <div style="width: 30%; margin: 25px auto;">
+<div class="row">
+    
+    <div class="centerText panel panel-default">
+        <div class="panel-body">
+            <h1 style="text-align: center">Edit <%= thing.name %></h1>
+            <hr>
             <form action="/things/<%= thing._id %>?_method=PUT" method="POST">
                 <div class="form-group">
                     <input class="form-control" type="text" name="thing[name]" value="<%= thing.name %>">
@@ -25,4 +27,5 @@
         </div>
     </div>
 </div>
+    
 <% include ../partials/footer %>

@@ -1,3 +1,7 @@
+body{
+    background-color: #2A9D8F;
+}
+
 .thumbnail{
     padding: 0;
 }
@@ -14,13 +18,46 @@
     display: inline;
 }
 
-.centerText {
+#headerPadding{
+    margin-top: 7%;
+}
+
+.centerText{
     width: 30%; 
     margin: 25px auto;
+}
+
+/*Index.ejs*/
+
+.indexThumbnail{
+    width: 100%;
+    height: 85%;
+}
+
+#thumbnailImage{
+    width: 100%;
+    height: 65%;
+    object-fit: contain;
+}
+
+.thumbnailSpacing{
+    display: flex; 
+    flex-wrap: wrap;
 }
 
 /*Show.ejs*/
 #map{
     height: 400px;
     width: 100%;
+}
+
+/*Media queries for mobile */
+@media (max-width: 420px){
+    #headerPadding{
+        margin-top: 17%;
+    }
+    .col-md-3{
+        margin: auto;
+        width: 100%;
+    }
 }

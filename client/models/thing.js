@@ -7,6 +7,7 @@ var thingSchema = new mongoose.Schema({
     location: String,
     lat: Number,
     long: Number,
+    created: { type: Date, default: Date.now},
     authour: {
         id:{
             type: mongoose.Schema.Types.ObjectId,

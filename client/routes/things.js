@@ -9,7 +9,7 @@ router.get("/", function(req, res){
         if(err){
             req.flash("error", "Couldn't find a thing in the database of things...");
         }else{
-            res.render("things/index", {things:things});
+            res.render("things/index", {things:things, page: "things"});
         }
     });
 });
