@@ -5,30 +5,40 @@ var middleware = require("../middleware");
 var geocoder = require("geocoder");
 
 router.get("/", function(req, res){
-    Thing.find({}, function(err, things){
-        if(err){
-            req.flash("error", "Couldn't find a thing in the database of things...");
-        }else{
-            res.render("things/index", {things:things, page: "things"});
-        }
+    var perPage = 4;
+    var pageQuery = parseInt(req.query.page);
+    var pageNumber = pageQuery ? pageQuery : 1;
+    Thing.find({}).skip(perPage * pageNumber - perPage).limit(perPage).exec(function(err, things){
+        Thing.count().exec(function (err, count){
+            if(err){
+                req.flash("error", "Couldn't find a thing in the database of things...");
+            }else{
+                res.render("things/index", {things:things, pages: Math.ceil(count/perPage), currentPage: pageNumber});
+            }
+        });
     });
 });
 
 router.post("/", middleware.isLoggedIn, function(req,res){
     var authour = {id: req.user._id, username: req.user.username};
     geocoder.geocode(req.body.location, function (err, data) {
-        var lat = data.results[0].geometry.location.lat;
-        var long = data.results[0].geometry.location.lng;
-        var location = data.results[0].formatted_address;
-        var newThing = {name: req.body.name, image: req.body.image, description: req.body.description, authour: authour, location: location, lat: lat, long: long};
-        Thing.create(newThing, function(err, things){
-            if(err){
-                req.flash("error", "Couldn't create this thing!");
-                res.redirect("/things");
-            }else{
-                res.redirect("/things");
-            }
-        });
+        if(err){
+            req.flash("error", "Location is in the incorrect format!");
+            res.redirect("/new");
+        }else{
+            var lat = data.results[0].geometry.location.lat;
+            var long = data.results[0].geometry.location.lng;
+            var location = data.results[0].formatted_address;
+            var newThing = {name: req.body.name, image: req.body.image, description: req.body.description, authour: authour, location: location, lat: lat, long: long};
+            Thing.create(newThing, function(err, things){
+                if(err){
+                    req.flash("error", "Couldn't create this thing!");
+                    res.redirect("/things");
+                }else{
+                    res.redirect("/things");
+                }
+            });   
+        }
     });
 });
 

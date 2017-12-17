@@ -25,5 +25,49 @@
         </div>
     <% }); %>
 </div>
+<div class="row text-center">
+    <% if(pages && pages > 0){ %>
+        <ul class="pagination text-center">
+            <% if(currentPage == 1){ %>
+                <li class="disabled"><a>First</a></li>
+            <% }else{ %>
+                <li><a href="/things">First</a></li>
+            <% } %>
+            
+            <% if(currentPage == 1){ %>
+                <li class="disabled"><a>«</a></li>
+            <% }else{ %>
+                <li><a href="/things?page=<%= Number(currentPage) - 1 %>">«</a></li>
+            <% } %>
+            
+            <% var i = (Number(currentPage) > 5 ? Number(currentPage) - 4 : 1) %>
+            <% if (i !== 1) { %>
+                <li class="disabled"><a>...</a></li>
+            <% } %>
+            <% for (; i <= (Number(currentPage) + 4) && i <= pages; i++) { %>
+                <% if (i == currentPage) { %>
+                    <li class="active"><a><%= i %></a></li>
+                <% } else { %>
+                    <li><a href="/things?page=<%= i %>"><%= i %></a></li>
+                <% } %>
+                <% if (i == Number(currentPage) + 4 && i < pages) { %>
+                    <li class="disabled"><a>...</a></li>
+                <% } %>
+            <% } %>
+     
+            <% if (currentPage == pages) { %>
+                <li class="disabled"><a>»</a></li>
+            <% } else { %>
+                <li><a href="/things?page=<%= Number(currentPage) + 1 %>">»</a></li>
+            <% } %>
+     
+            <% if (currentPage == pages) { %>
+                <li class="disabled"><a>Last</a></li>
+            <% } else { %>
+                <li><a href="/things?page=<%= pages %>">Last</a></li>
+            <% } %>
+        </ul>
+    <% } %>
+</div>
     
 <% include ../partials/footer %>
