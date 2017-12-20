@@ -2,10 +2,18 @@
 
 <header class="jumbotron">
     <div class="container">
-        <h1>Welcome to Rate This Thing!</h1>
+        <h1>Welcome to Rate My Thing!</h1>
         <p>Check out all these cool things!</p>
         <p>
             <a class="btn btn-primary btn-large" href="/things/new">Add your own thing!</a>
+        </p>
+        <p>
+            <form action="/things" method="GET" class="form-inline">
+                <div class="form-group">
+                    <input type="text" name="search" placeholder="Search for a thing..." class="form-control">
+                    <input type="submit" value="Search" class="btn btn-default">
+                </div>    
+            </form>
         </p>
     </div>
 </header>

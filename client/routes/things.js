@@ -5,7 +5,17 @@ var middleware = require("../middleware");
 var geocoder = require("geocoder");
 
 router.get("/", function(req, res){
-    var perPage = 4;
+    if(req.query.search){
+        Thing.find({}, function(err, things){
+            if(err){
+                req.flash("Couldn't find a thing...");
+                req.redirect("/things");
+            }else{
+                
+            }
+        });
+    }
+    var perPage = 16;
     var pageQuery = parseInt(req.query.page);
     var pageNumber = pageQuery ? pageQuery : 1;
     Thing.find({}).skip(perPage * pageNumber - perPage).limit(perPage).exec(function(err, things){

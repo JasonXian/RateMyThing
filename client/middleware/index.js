@@ -1,6 +1,7 @@
 var middleWareObject = {};
 var Comment = require("../models/comments");
 var Thing = require("../models/thing");
+var User = require("../models/user");
 
 middleWareObject.checkThingOwner = function(req, res, next){
     if(req.isAuthenticated()){
@@ -9,7 +10,7 @@ middleWareObject.checkThingOwner = function(req, res, next){
                 req.flash("error", "This thing has gone missing!");
                 res.redirect("/things");
             }else{
-                if(thing.authour.id.equals(req.user._id)){
+                if((res.locals.currentUser.isAdmin === 1) || thing.authour.id.equals(req.user._id)){
                     next();
                 }else{
                     req.flash("error", "You don't have permission to do that!");
@@ -30,7 +31,7 @@ middleWareObject.checkCommentOwner = function(req, res, next){
                 req.flash("error", "Couldn't find that comment!");
                 res.redirect("/things");
             }else{
-                if(comment.authour.id.equals(req.user._id)){
+                if((res.locals.currentUser.isAdmin === 1) || comment.authour.id.equals(req.user._id)){
                     next();
                 }else{
                     req.flash("error", "You don't have permission to do that!");

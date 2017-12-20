@@ -62,7 +62,7 @@ router.put("/:comment_id", middleware.checkCommentOwner, function(req, res){
 
 router.delete("/:comment_id", middleware.checkCommentOwner, function(req, res){
    Comment.findByIdAndRemove(req.params.comment_id, function(err, comment){
-       if(err || !thing){
+       if(err || !comment){
            req.flash("error", "Couldn't find this comment!");
            res.redirect("back");
        }else{

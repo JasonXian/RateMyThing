@@ -13,7 +13,7 @@
                 <h4><%= user.firstName%> <%= user.lastName %></h4>
                 <a href="mailto:<%= user.email %>"><%= user.email %></a>
                 <p><%= user.bio %></p>
-                <% if(currentUser && user.id == currentUser.id){ %>
+                <% if(currentUser && (user.id == currentUser.id || currentUser.isAdmin)){ %>
                     <a class="btn btn-warning btn-md editButton" role="button" data-toggle="collapse" href="#collapseComment" aria-expanded="false" aria-controls="collapseComment">Edit</a>
                     <div class="collapse" id="collapseComment">
                         <form id="editProfileForm" action="/users/<%= user.id %>?_method=PUT" method="POST">
@@ -35,6 +35,11 @@
                             <div class="form-group">
                                 <textarea class="form-control textForms" name="user[bio]" form="editProfileForm" rows="5" cols="70" placeholder="Bio"><%= user.bio %></textarea>
                             </div>
+                            <% if(currentUser.isAdmin){ %>
+                                <div class="form-group">
+                                    Admin Status:<input class="form-control" type="number" name="user[isAdmin]" form="editProfileForm" value="<%= user.isAdmin %>" max="1" min="0">
+                                </div>
+                            <% } %>
                             <div class="form-group">
                                 <button class="btn btn-success btn-sm" aria-hidden="true">Submit</button>
                             </div>

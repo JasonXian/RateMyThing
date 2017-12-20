@@ -3,13 +3,16 @@ var router = express.Router();
 var passport = require("passport");
 var User = require("../models/user");
 var Thing = require("../models/thing");
+var async = require("async");
+var nodemailer = require("nodemailer");
+var crypto = require("crypto");
 
 router.get("/", function(req, res){
     res.render("landing");
 });
 
 router.get("/register", function(req, res) {
-    res.render("register", {page: "register"});
+    res.render("register", {page: "register"});   
 });
 
 router.post("/register", function(req, res) {
@@ -17,7 +20,8 @@ router.post("/register", function(req, res) {
         username: req.body.username, 
         firstName: req.body.firstName, 
         lastName: req.body.lastName, 
-        email: req.body.email
+        email: req.body.email,
+        isAdmin: 0
     });
     User.register(newUser, req.body.password, function(err, user){
         if(err || !user){
@@ -32,7 +36,7 @@ router.post("/register", function(req, res) {
 });
 
 router.get("/login", function(req, res) {
-    res.render("login", {page: "login"});
+    res.render("login", {page: "login"});   
 });
 
 router.post("/login", passport.authenticate("local", 
@@ -74,6 +78,104 @@ router.put("/users/:id", function(req, res){
             res.redirect("/things");
         }else{
             res.redirect("/users/" + user._id);
+        }
+    });
+});
+
+router.get("/forgot", function(req, res) {
+   res.render("forgot"); 
+});
+
+router.post("/forgot", function(req, res) {
+   async.waterfall([
+        function(done){
+           crypto.randomBytes(20, function(err, buf){
+              var token = buf.toString("hex");
+              done(err, token);
+           });
+        }
+    , 
+        function(token, done){
+            User.findOne({email: req.body.email}, function(err, user){
+                if(err){
+                    req.flash("error", "Email does not match any user.");
+                    req.redirect("/forgot");
+                }else{
+                    user.passwordToken = token;
+                    user.passwordExpiry = Date.now + 1800000;
+                    user.save(function(err){
+                        done(err, token, user);
+                    });
+                }
+            });   
+        }
+    ,
+        function(token, user, done){
+            var smtpTransport = nodemailer({
+               service: "Gmail",
+               auth:{
+                   user: "ratemything@gmail.com",
+                   pass: process.env.gmailpw
+               }
+            });
+            var mailOptions = {
+                to: user.email,
+                from: "ratemything@gmail.com",
+                subject: "Rate My Thing Password Reset",
+                text: "Please click on the following link in order to reset your password: \n" + "http://" + req.header.host + "/reset" + token + "\n"
+            }
+            smtpTransport.sendMail(mailOptions, function(err){
+               if(err){
+                   req.flash("error", "Could not send a password reset email.");
+                   req.redirect("/forgot");
+               }else{
+                   req.flash("success", "Email sent, will expire in 30 minutes");
+                   req.redirect("/forgot");
+               }
+            });
+        }
+    ], function(err){
+        if(err){
+            req.flash("error", "Could not send a password reset email.");
+        }
+        req.redirect("/forgot");
+    });
+});
+
+router.get("/reset/:token", function(req, res) {
+    User.findOne({passwordToken: req.params.token, passwordExpiry: {$gt: Date.now()}}, function(err, user){
+        if(err){
+            req.flash("Error, either token is invalid or has timed out");
+            res.redirect("back");
+        }else{
+            res.render("reset", {token: req.params.token});
+        }
+    });
+});
+
+router.post("/reset/:token", function(req, res) {
+    User.findOne({passwordToken: req.params.token, passwordExpiry: {$gt: Date.now()}}, function(err, user){
+        if(err){
+            req.flash("error", "Error, either token is invalid or has timed out.");
+            return res.redirect("back");
+        }else{
+            if(req.body.password === req.body.confirmPassword){
+                user.setPassword(req.body.password, function(err){
+                    user.passwordToken = undefined;
+                    user.passwordExpiry = undefined;
+                    user.save(function(err){
+                        if(err){
+                            req.flash("Could not save new password.");
+                            res.redirect("back");
+                        }else{
+                            res.redirect("/things");
+                        }
+                    });
+                });
+            }else{
+                req.flash("error", "Error, passwords don't match!");
+                res.redirect("back");
+            }
         }
     });
 });
