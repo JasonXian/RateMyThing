@@ -17,12 +17,13 @@
              <img class="image-responsive thumbnailStyling" src="<%= thing.image %>"/>
              <div class="caption-full">
                  <h4 class="pull-right">
-                     Overall Rating: 
-                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                     Overall Rating
+                     <% for(var i = 0; i < thing.rating; i++){ %>
+                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                     <% } %>
+                     <% for(var i = 0; i < (5 - thing.rating); i++){ %>
+                         <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                     <% } %>
                  </h4>
                  <h4><a><%= thing.name %></a></h4>
                  <p><%= thing.description %></p>
@@ -43,7 +44,7 @@
             <div class="collapse" id="collapseComment">
                 <div class="well commentBox">
                     <% if(!currentUser){ %>
-                    <h5>You must login in order to comment.<a href="/login"> Click here</a> to go to the login page.</h5>
+                        <h5>You must login in order to comment.<a href="/login"> Click here</a> to go to the login page.</h5>
                     <% } else { %>
                         <h4>Add a new comment:</h4>
                         <form id="addCommentForm" action="/things/<%= thing._id %>/comments" method="POST">
@@ -51,7 +52,10 @@
                                 <input class="form-control" type="text" disabled value="<%= currentUser.username %>"/>
                             </div>
                             <div class="form-group">
-                                <textarea class="form-control" name="comment[text]" placeholder="Comment text..." form="addCommentForm" rows="5" cols="70"></textarea>
+                                <textarea class="form-control" name="comment[text]" placeholder="Comment text..." form="addCommentForm" rows="5" cols="70" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="number" name="rating" min="1" max="5" placeholder="Rating 1-5" required>
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-success btn-sm" aria-hidden="true">Submit</button>

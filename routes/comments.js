@@ -29,6 +29,7 @@ router.post("/", middleware.isLoggedIn, function(req, res){
                    comment.authour.id = req.user._id;
                    comment.save();
                    thing.comments.push(comment);
+                   thing.rating = Math.floor((thing.rating + parseInt(req.body.rating))/2);
                    thing.save();
                    res.redirect("/things/" + thing._id);
                }
