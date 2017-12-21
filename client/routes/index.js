@@ -99,46 +99,42 @@ router.post("/forgot", function(req, res) {
             User.findOne({email: req.body.email}, function(err, user){
                 if(err){
                     req.flash("error", "Email does not match any user.");
-                    req.redirect("/forgot");
+                    res.redirect("/forgot");
                 }else{
                     user.passwordToken = token;
-                    user.passwordExpiry = Date.now + 1800000;
+                    user.passwordExpiry = Date.now() + 1800000;
                     user.save(function(err){
                         done(err, token, user);
                     });
                 }
-            });   
+            });
         }
     ,
         function(token, user, done){
-            var smtpTransport = nodemailer({
+            var smtpTransport = nodemailer.createTransport({
                service: "Gmail",
                auth:{
                    user: "ratemything@gmail.com",
-                   pass: process.env.gmailpw
+                   pass: process.env.gmailPW
                }
             });
             var mailOptions = {
                 to: user.email,
                 from: "ratemything@gmail.com",
                 subject: "Rate My Thing Password Reset",
-                text: "Please click on the following link in order to reset your password: \n" + "http://" + req.header.host + "/reset" + token + "\n"
+                text: "Please click on the following link in order to reset your password: \n" + "http://" + req.headers.host + "/reset/" + token + "\n"
             }
             smtpTransport.sendMail(mailOptions, function(err){
-               if(err){
-                   req.flash("error", "Could not send a password reset email.");
-                   req.redirect("/forgot");
-               }else{
-                   req.flash("success", "Email sent, will expire in 30 minutes");
-                   req.redirect("/forgot");
-               }
+               done(err, "done");
             });
         }
     ], function(err){
         if(err){
             req.flash("error", "Could not send a password reset email.");
+        }else{
+            req.flash("success", "Email sent, will expire in 30 minutes");
         }
-        req.redirect("/forgot");
+        res.redirect("/forgot");
     });
 });
 

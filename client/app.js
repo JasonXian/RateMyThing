@@ -13,7 +13,7 @@ var methodOverride = require("method-override");
 var flash = require("connect-flash");
 var app = express();
 
-mongoose.connect("mongodb://localhost/rate_my_thing", {useMongoClient: true});
+mongoose.connect(process.env.databaseURL, {useMongoClient: true});
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
