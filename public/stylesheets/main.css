@@ -32,7 +32,7 @@ body{
 
 .indexThumbnail{
     width: 100%;
-    height: 85%;
+    height: 80%;
     padding: 10px;
 }
 
@@ -58,6 +58,10 @@ body{
 }
 
 .glyphicon-star{
+    color: #e5e54e;
+}
+
+.glyphicon-star-empty{
     color: #e5e54e;
 }
 

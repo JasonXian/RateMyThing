@@ -18,11 +18,11 @@
              <div class="caption-full">
                  <h4 class="pull-right">
                      Overall Rating
-                     <% for(var i = 0; i < thing.rating; i++){ %>
-                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                     <% } %>
                      <% for(var i = 0; i < (5 - thing.rating); i++){ %>
                          <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                     <% } %>
+                     <% for(var i = 0; i < thing.rating; i++){ %>
+                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                      <% } %>
                  </h4>
                  <h4><a><%= thing.name %></a></h4>
