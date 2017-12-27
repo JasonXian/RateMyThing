@@ -53,9 +53,15 @@
         <% things.forEach(function(thing){ %>
         <div class="col-xs-12 col-sm-4 col-md-4">
             <div class="thumbnail userThingThumbnail">
-                <img src="<%= thing.image %>" id="thumbnailImage">
+                <a href="/things/<%= thing.id %>"><img src="<%= thing.image %>" id="thumbnailImage"></a>
                 <hr>
                 <h4><a href="/things/<%= thing.id %>"><%= thing.name %></a></h4>
+                <% for(var i = 0; i < (5 - thing.rating); i++){ %>
+                    <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                <% } %>
+                <% for(var i = 0; i < thing.rating; i++){ %>
+                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                <% } %>
             </div>
         </div>
     <% }); %>

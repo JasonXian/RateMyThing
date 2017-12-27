@@ -21,14 +21,17 @@
     <% things.forEach(function(thing){ %>
         <div class="col-md-3 col-sm-6">
             <div class="thumbnail indexThumbnail">
-                <img src="<%= thing.image %>" id="thumbnailImage"/>
+                <a href="/things/<%= thing._id %>"><img src="<%= thing.image %>" id="thumbnailImage"></a>
                 <hr style="margin: 10px 0 0 0;">
                 <div class="caption" style="padding-top: 0;">
-                    <h4><%= thing.name %></h4>
+                    <a href="/things/<%= thing._id %>"><h4 style="margin-bottom: 0;"><%= thing.name %></h4></a>
                 </div>
-                <p>
-                    <a href="/things/<%= thing._id %>" class="btn btn-primary">More info</a>
-                </p>
+                <% for(var i = 0; i < (5 - thing.rating); i++){ %>
+                    <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                <% } %>
+                <% for(var i = 0; i < thing.rating; i++){ %>
+                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                <% } %>
             </div>
         </div>
     <% }); %>
