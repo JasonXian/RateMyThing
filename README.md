@@ -8,4 +8,4 @@ Users are able to register for an account using their email and have a unique pe
 
 When creating new things, users are also given the option upload a photo and input a location of the thing, which uses google maps API to display a map of the location.
 
-The site is hosted here: https://shrouded-plains-42964.herokuapp.com/ , feel free to test it out and send me any feedback you might have!
+The site is hosted here: https://ratemything.herokuapp.com/ , feel free to test it out and send me any feedback you might have!

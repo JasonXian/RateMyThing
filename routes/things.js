@@ -65,22 +65,27 @@ router.post("/", middleware.isLoggedIn, upload.single("image"), function(req,res
         req.body.thing.authour = authour;
         geocoder.geocode(req.body.thing.location, function (err, data) {
             if(err){
-                req.flash("error", "Location is in the incorrect format!");
-                res.redirect("/new");
+                req.flash("error", "Location does not exist.");
+                res.redirect("/things/new");
             }else{
-                var lat = data.results[0].geometry.location.lat;
-                var long = data.results[0].geometry.location.lng;
-                var location = data.results[0].formatted_address;
-                req.body.thing.lat = lat;
-                req.body.thing.long = long;
-                Thing.create(req.body.thing, function(err, things){
-                    if(err){
-                        req.flash("error", "Couldn't create this thing!");
-                        res.redirect("/things");
-                    }else{
-                        res.redirect("/things");
-                    }
-                }); 
+                if(data.results[0] === undefined){
+                    req.flash("error", "Location does not exist.");
+                    res.redirect("/things/new");
+                }else{
+                    var lat = data.results[0].geometry.location.lat;
+                    var long = data.results[0].geometry.location.lng;
+                    var location = data.results[0].formatted_address;
+                    req.body.thing.lat = lat;
+                    req.body.thing.long = long;
+                    Thing.create(req.body.thing, function(err, things){
+                        if(err){
+                            req.flash("error", "Couldn't create this thing!");
+                            res.redirect("/things");
+                        }else{
+                            res.redirect("/things");
+                        }
+                    });   
+                }
             }
         });
     });   
@@ -110,22 +115,27 @@ router.get("/:id/edit", middleware.checkThingOwner, function(req, res) {
 router.put("/:id", function(req, res) {
      geocoder.geocode(req.body.location, function (err, data) {
         if(err){
-            req.flash("Sorry, that's not a valid location!");
-            req.redirect("things/news");
+            req.flash("error","Sorry, that's not a valid location!");
+            res.redirect("/things/new");
         }else{
-            var lat = data.results[0].geometry.location.lat;
-            var long = data.results[0].geometry.location.lng;
-            var location = data.results[0].formatted_address;
-            var updatedThing = {name: req.body.name, image: req.body.image, description: req.body.description, location: location, lat: lat, long: long};
-            Thing.findByIdAndUpdate(req.params.id, {$set: updatedThing}, function(err, thing){
-                if(err){
-                    req.flash("error", "Couldn't find this thing!");
-                    res.redirect("/things");
-                }else{
-                    req.flash("success", "Updated that thing!");
-                    res.redirect("/things/" + req.params.id);
-                }
-            });
+            if(data.results[0] === undefined){
+                    req.flash("error", "Location does not exist.");
+                    res.redirect("/things/new");
+            }else{
+                var lat = data.results[0].geometry.location.lat;
+                var long = data.results[0].geometry.location.lng;
+                var location = data.results[0].formatted_address;
+                var updatedThing = {name: req.body.name, image: req.body.image, description: req.body.description, location: location, lat: lat, long: long};
+                Thing.findByIdAndUpdate(req.params.id, {$set: updatedThing}, function(err, thing){
+                    if(err){
+                        req.flash("error", "Couldn't find this thing!");
+                        res.redirect("/things");
+                    }else{
+                        req.flash("success", "Updated that thing!");
+                        res.redirect("/things/" + req.params.id);
+                    }
+                });
+            }
         }
     });
 });
