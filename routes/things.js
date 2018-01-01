@@ -109,19 +109,24 @@ router.get("/:id/edit", middleware.checkThingOwner, function(req, res) {
 
 router.put("/:id", function(req, res) {
      geocoder.geocode(req.body.location, function (err, data) {
-        var lat = data.results[0].geometry.location.lat;
-        var long = data.results[0].geometry.location.lng;
-        var location = data.results[0].formatted_address;
-        var updatedThing = {name: req.body.name, image: req.body.image, description: req.body.description, location: location, lat: lat, long: long};
-        Thing.findByIdAndUpdate(req.params.id, {$set: updatedThing}, function(err, thing){
-            if(err){
-                req.flash("error", "Couldn't find this thing!");
-                res.redirect("/things");
-            }else{
-                req.flash("success", "Updated that thing!");
-                res.redirect("/things/" + req.params.id);
-            }
-        });
+        if(err){
+            req.flash("Sorry, that's not a valid location!");
+            req.redirect("things/news");
+        }else{
+            var lat = data.results[0].geometry.location.lat;
+            var long = data.results[0].geometry.location.lng;
+            var location = data.results[0].formatted_address;
+            var updatedThing = {name: req.body.name, image: req.body.image, description: req.body.description, location: location, lat: lat, long: long};
+            Thing.findByIdAndUpdate(req.params.id, {$set: updatedThing}, function(err, thing){
+                if(err){
+                    req.flash("error", "Couldn't find this thing!");
+                    res.redirect("/things");
+                }else{
+                    req.flash("success", "Updated that thing!");
+                    res.redirect("/things/" + req.params.id);
+                }
+            });
+        }
     });
 });
 

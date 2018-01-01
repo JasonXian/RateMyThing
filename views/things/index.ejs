@@ -23,7 +23,7 @@
             <div class="thumbnail indexThumbnail">
                 <a href="/things/<%= thing._id %>"><img src="<%= thing.image %>" id="thumbnailImage"></a>
                 <hr style="margin: 10px 0 0 0;">
-                <div class="caption" style="padding-top: 0;">
+                <div class="caption">
                     <a href="/things/<%= thing._id %>"><h4 style="margin-bottom: 0;"><%= thing.name %></h4></a>
                 </div>
                 <% for(var i = 0; i < (5 - thing.rating); i++){ %>

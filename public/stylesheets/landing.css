@@ -42,7 +42,7 @@ body {
 }
 
 .slideshow li:nth-child(1) { 
-  background-image: url(https://images.pexels.com/photos/33597/guitar-classical-guitar-acoustic-guitar-electric-guitar.jpg?w=1260&h=750&auto=compress&cs=tinysrgb); 
+  background-image: url(https://images.pexels.com/photos/139764/pexels-photo-139764.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb);
 }
 .slideshow li:nth-child(2) { 
   background-image: url(https://images.pexels.com/photos/12211/pexels-photo-12211.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb);
@@ -57,7 +57,7 @@ body {
   animation-delay: 30s; 
 }
 .slideshow li:nth-child(5) { 
-  background-image: url(https://images.pexels.com/photos/139764/pexels-photo-139764.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb);
+  background-image: url(https://images.pexels.com/photos/33597/guitar-classical-guitar-acoustic-guitar-electric-guitar.jpg?w=1260&h=750&auto=compress&cs=tinysrgb); 
   animation-delay: 40s; 
 }
 
