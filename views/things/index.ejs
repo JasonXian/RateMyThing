@@ -11,7 +11,7 @@
             <form action="/things" method="GET" class="form-inline">
                 <div class="form-group">
                     <input type="text" name="search" placeholder="Search for a thing..." class="form-control">
-                    <input type="submit" value="Search" class="btn btn-default">
+                    <input type="submit" value="Search" class="btn btn-info">
                 </div>    
             </form>
         </p>
@@ -23,14 +23,14 @@
             <div class="thumbnail indexThumbnail">
                 <a href="/things/<%= thing._id %>"><img src="<%= thing.image %>" id="thumbnailImage"></a>
                 <hr style="margin: 10px 0 0 0;">
-                <div class="caption">
+                <div class="caption" style="padding-top: 0;">
                     <a href="/things/<%= thing._id %>"><h4 style="margin-bottom: 0;"><%= thing.name %></h4></a>
                 </div>
                 <% for(var i = 0; i < (5 - thing.rating); i++){ %>
-                    <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
                 <% } %>
                 <% for(var i = 0; i < thing.rating; i++){ %>
-                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                    <i class="fa fa-star" aria-hidden="true"></i>
                 <% } %>
             </div>
         </div>
@@ -80,5 +80,11 @@
         </ul>
     <% } %>
 </div>
+</div>
+<footer>
+    <a href="https://github.com/JasonXian/RateMyThing" target="_blank">
+        <i class="fa fa-github" aria-hidden="true" style="color: white; font-size: 50px;"></i>
+    </a>
+</footer>
     
 <% include ../partials/footer %>

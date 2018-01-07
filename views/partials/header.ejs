@@ -3,8 +3,10 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Rate My Thing</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+        <link rel="stylesheet" href="/stylesheets/bootstrap.min.css"></link>
         <link rel="stylesheet" href="/stylesheets/main.css"></link>
+        <link href="/stylesheets/bootstrap-glyphicons.css" rel="stylesheet"></link>
+        <script src="https://use.fontawesome.com/58b9791761.js"></script>
     </head>
     <body>
         <nav class="navbar navbar-default navbar-fixed-top">
@@ -21,6 +23,11 @@
                 <div id="navbar" class="collapse navbar-collapse">
                   <ul class="nav navbar-nav">
                     <li class="<%= typeof page !== 'undefined' && page === 'things' ? 'active' : '' %>"><a href="/things">Home</a></li>
+                    <li>
+                        <a href="https://github.com/JasonXian/RateMyThing" target="_blank" style="padding: 15px 0 0 15px;">
+                            <i class="fa fa-github" aria-hidden="true" style="color: white; font-size: 30px;"></i>
+                        </a>
+                    </li>
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
                       <% if(!currentUser){ %>

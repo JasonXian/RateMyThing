@@ -1,13 +1,13 @@
+html{
+    height: 100%;
+}
+
 body{
-    background-color: #2A9D8F;
+    background-color: white;
 }
 
 .thumbnail{
     padding: 0;
-}
-
-.thumbnail img{
-    width: 100%;
 }
 
 .thumbnail .caption-full{
@@ -28,23 +28,44 @@ body{
     margin: 25px auto;
 }
 
+/*footer{ currently broken*/
+/*    background-color: #2c3e50;*/
+/*    text-align: center;*/
+/*    position: relative;*/
+/*    bottom: 0;*/
+/*    width: 100%;*/
+/*}*/
+
 /*Index.ejs*/
 
 .indexThumbnail{
     width: 100%;
-    height: 75%;
-    padding: 10px;
+    height: 95%;
+    padding: 5px;
+    background-color: #ecf0f1;
+}
+
+.col-sm-6{
+    height: 350px;
 }
 
 #thumbnailImage{
     width: 100%;
-    height: 65%;
+    height: 75%;
     object-fit: contain;
 }
 
 .thumbnailSpacing{
     display: flex; 
     flex-wrap: wrap;
+}
+
+.pagination > .disabled > a{
+    background-color: #2c3e50;
+}
+
+.pagination > .active > a{
+    background-color: #2c3e50;
 }
 
 /*Show.ejs*/
@@ -78,16 +99,30 @@ body{
     resize: none;
 }
 
+.panel{
+    background-color: #ecf0f1;
+}
+
+.thumbnail{
+    background-color: #ecf0f1;
+}
+
 /*User.ejs*/
 .userThingThumbnail{
     width: 100%;
-    height: 85%;
+    height: 80%;
     padding: 5px;
 }
 
 .userThumbnailSpacing{
     display: flex; 
     flex-wrap: wrap;
+}
+
+#userThumbnailImage{
+    width: 100%;
+    height: 70%;
+    object-fit: contain;
 }
 
 /*Media queries for mobile */

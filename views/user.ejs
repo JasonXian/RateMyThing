@@ -15,7 +15,7 @@
                 <p><%= user.bio %></p>
                 <% if(currentUser && (user.id == currentUser.id || currentUser.isAdmin)){ %>
                     <a class="btn btn-warning btn-md editButton" role="button" data-toggle="collapse" href="#collapseComment" aria-expanded="false" aria-controls="collapseComment">Edit</a>
-                    <div class="collapse" id="collapseComment">
+                    <div class="collapse commentPadding" id="collapseComment">
                         <form id="editProfileForm" action="/users/<%= user.id %>?_method=PUT" method="POST">
                             <div class="form-group">
                                 <input class="form-control" type="text" disabled value="<%= user.username %>"/>
@@ -53,14 +53,14 @@
         <% things.forEach(function(thing){ %>
         <div class="col-xs-12 col-sm-4 col-md-4">
             <div class="thumbnail userThingThumbnail">
-                <a href="/things/<%= thing.id %>"><img src="<%= thing.image %>" id="thumbnailImage"></a>
-                <hr>
+                <a href="/things/<%= thing.id %>"><img src="<%= thing.image %>" id="userThumbnailImage"></a>
+                <hr style="margin-bottom: 0;">
                 <h4><a href="/things/<%= thing.id %>"><%= thing.name %></a></h4>
                 <% for(var i = 0; i < (5 - thing.rating); i++){ %>
-                    <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
                 <% } %>
                 <% for(var i = 0; i < thing.rating; i++){ %>
-                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                    <i class="fa fa-star" aria-hidden="true"></i>
                 <% } %>
             </div>
         </div>
