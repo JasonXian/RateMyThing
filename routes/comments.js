@@ -27,11 +27,23 @@ router.post("/", middleware.isLoggedIn, function(req, res){
                }else{
                    comment.authour.username = req.user.username;
                    comment.authour.id = req.user._id;
-                   comment.save();
-                   thing.comments.push(comment);
-                   thing.rating = Math.round((thing.rating + parseInt(req.body.rating))/2);
-                   thing.save();
-                   res.redirect("/things/" + thing._id);
+                   comment.save(err => {
+                        if(err){
+                            req.flash("error", "Error saving comment. Please try again.");
+                            res.redirect("/things/" + thing._id);
+                        }
+                        var updatedComments = thing.comments;
+                        updatedComments.push(comment);
+                        thing.comments = updatedComments;
+                        thing.rating = Math.round((thing.rating + parseInt(req.body.rating))/2);
+                        thing.save(err => {
+                            if(err){
+                                req.flash("error", "Error saving comment. Please try again.");
+                                res.redirect("/things/" + thing._id);
+                            }
+                            res.redirect("/things/" + thing._id);
+                        });
+                   });
                }
            });
         }

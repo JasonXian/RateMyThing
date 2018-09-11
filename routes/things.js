@@ -100,6 +100,7 @@ router.get("/:id", function(req, res) {
         if(err){
             req.flash("error", "Couldn't find this thing!");
         }else{
+            console.log(JSON.stringify(foundThing, null, 2));
             res.render("things/show", {thing: foundThing});
         }
     });
