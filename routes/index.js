@@ -97,7 +97,7 @@ router.post("/forgot", function(req, res) {
     , 
         function(token, done){
             User.findOne({email: req.body.email}, function(err, user){
-                if(err){
+                if(err || !user){
                     req.flash("error", "Email does not match any user.");
                     res.redirect("/forgot");
                 }else{
@@ -112,7 +112,7 @@ router.post("/forgot", function(req, res) {
     ,
         function(token, user, done){
             var smtpTransport = nodemailer.createTransport({
-               service: "Gmail",
+               service: "gmail",
                auth:{
                    user: "ratemything@gmail.com",
                    pass: process.env.gmailPW

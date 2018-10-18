@@ -2,8 +2,15 @@ var express = require("express");
 var router = express.Router();
 var Thing = require("../models/thing");
 var middleware = require("../middleware");
-var geocoder = require("geocoder");
+var NodeGeocoder = require("node-geocoder");
 var multer = require("multer");
+
+var geocoderOptions = {
+    provider: "google",
+    apiKey: "AIzaSyBQ-lD_yEjjgFsrNi_2z4GlQaGXWBncLCw"
+}
+
+var geocoder = NodeGeocoder(geocoderOptions);
 
 var storage = multer.diskStorage({
     filename: function(req, file, callback){
@@ -43,7 +50,7 @@ router.get("/", function(req, res){
             }
         });
     }else{
-        var perPage = 16;
+        var perPage = 4;
         var pageQuery = parseInt(req.query.page);
         var pageNumber = pageQuery ? pageQuery : 1;
         Thing.find({}).skip(perPage * pageNumber - perPage).limit(perPage).exec(function(err, things){
@@ -65,21 +72,20 @@ router.post("/", middleware.isLoggedIn, upload.single("image"), function(req,res
         req.body.thing.authour = authour;
         geocoder.geocode(req.body.thing.location, function (err, data) {
             if(err){
-                req.flash("error", "Location does not exist.");
+                req.flash("error", "Location could not be found.");
                 res.redirect("/things/new");
             }else{
-                if(data.results[0] === undefined){
+                if(data[0] === undefined){
                     req.flash("error", "Location does not exist.");
                     res.redirect("/things/new");
                 }else{
-                    var lat = data.results[0].geometry.location.lat;
-                    var long = data.results[0].geometry.location.lng;
-                    var location = data.results[0].formatted_address;
+                    var lat = data[0].latitude;
+                    var long = data[0].longitude;
                     req.body.thing.lat = lat;
                     req.body.thing.long = long;
                     Thing.create(req.body.thing, function(err, things){
                         if(err){
-                            req.flash("error", "Couldn't create this thing!");
+                            req.flash("error", "Sorry, couldn't create this thing!");
                             res.redirect("/things");
                         }else{
                             res.redirect("/things");
@@ -114,19 +120,19 @@ router.get("/:id/edit", middleware.checkThingOwner, function(req, res) {
 });
 
 router.put("/:id", function(req, res) {
-     geocoder.geocode(req.body.location, function (err, data) {
+     geocoder.geocode(req.body.thing.location, function (err, data) {
         if(err){
             req.flash("error","Sorry, that's not a valid location!");
             res.redirect("/things/new");
         }else{
-            if(data.results[0] === undefined){
+            if(data[0] === undefined){
                     req.flash("error", "Location does not exist.");
                     res.redirect("/things/new");
             }else{
-                var lat = data.results[0].geometry.location.lat;
-                var long = data.results[0].geometry.location.lng;
-                var location = data.results[0].formatted_address;
-                var updatedThing = {name: req.body.name, image: req.body.image, description: req.body.description, location: location, lat: lat, long: long};
+                var lat = data[0].latitude;
+                var long = data[0].longitude;
+                var location = req.body.thing.location;
+                var updatedThing = {name: req.body.thing.name, description: req.body.thing.description, location: location, lat: lat, long: long};
                 Thing.findByIdAndUpdate(req.params.id, {$set: updatedThing}, function(err, thing){
                     if(err){
                         req.flash("error", "Couldn't find this thing!");
